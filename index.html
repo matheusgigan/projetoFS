@@ -1,12 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeto Filmes e Series</title>
-    <link rel="stylesheet" href="style.cc">
-</head><h1>teste</h1>
+    <title>Criptografia e Descriptografia</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
-    
+    <div class="container">
+        <h1>Criptografia</h1>
+
+        <label for="texto">Digite o texto:</label>
+        <input type="text" id="texto" name="texto">
+
+        <label for="deslocamento">Digite o deslocamento:</label>
+        <input type="number" id="deslocamento" name="deslocamento">
+
+        <button onclick="criptografarTexto()">Criptografar</button>
+        <button onclick="descriptografarTexto()">Descriptografar</button>
+
+        <p><strong>Texto Criptografado:</strong> <span id="textoCriptografado"></span></p>
+        <p><strong>Texto Descriptografado:</strong> <span id="textoDescriptografado"></span></p>
+    </div>
+
+    <script>
+        function criptografar(texto, deslocamento) {
+            let textoSubstituido = '';
+
+            for (let i = 0; i < texto.length; i++) {
+                let charAtual = texto.charCodeAt(i);
+
+                if (charAtual >= 65 && charAtual <= 90) {
+                    textoSubstituido += String.fromCharCode((charAtual - 65 + deslocamento) % 26 + 65);
+                } else if (charAtual >= 97 && charAtual <= 122) {
+                    textoSubstituido += String.fromCharCode((charAtual - 97 + deslocamento) % 26 + 97);
+                } else if (charAtual >= 48 && charAtual <= 57) {
+                    textoSubstituido += String.fromCharCode((charAtual - 48 + deslocamento) % 10 + 48);
+                } else {
+                    textoSubstituido += String.fromCharCode(charAtual);
+                }
+            }
+
+            return textoSubstituido.split('').reverse().join('');
+        }
+
+        function descriptografar(texto, deslocamento) {
+            let textoTransposto = texto.split('').reverse().join('');
+            let textoOriginal = '';
+
+            for (let i = 0; i < textoTransposto.length; i++) {
+                let charAtual = textoTransposto.charCodeAt(i);
+
+                if (charAtual >= 65 && charAtual <= 90) {
+                    textoOriginal += String.fromCharCode((charAtual - 65 - deslocamento + 26) % 26 + 65);
+                } else if (charAtual >= 97 && charAtual <= 122) {
+                    textoOriginal += String.fromCharCode((charAtual - 97 - deslocamento + 26) % 26 + 97);
+                } else if (charAtual >= 48 && charAtual <= 57) {
+                    textoOriginal += String.fromCharCode((charAtual - 48 - deslocamento + 10) % 10 + 48);
+                } else {
+                    textoOriginal += String.fromCharCode(charAtual);
+                }
+            }
+
+            return textoOriginal;
+        }
+
+        function criptografarTexto() {
+            const texto = document.getElementById('texto').value;
+            const deslocamento = parseInt(document.getElementById('deslocamento').value);
+
+            const textoCriptografado = criptografar(texto, deslocamento);
+            document.getElementById('textoCriptografado').textContent = textoCriptografado;
+        }
+
+        function descriptografarTexto() {
+            const textoCriptografado = document.getElementById('textoCriptografado').textContent;
+            const deslocamento = parseInt(document.getElementById('deslocamento').value);
+
+            const textoDescriptografado = descriptografar(textoCriptografado, deslocamento);
+            document.getElementById('textoDescriptografado').textContent = textoDescriptografado;
+        }
+    </script>
 </body>
 </html>
